@@ -1,0 +1,19 @@
+version: "3.9"
+services:
+  app:
+    image: danger89/cmake:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ../lib:/app/lib
+      - ../inc:/app/inc
+      - ../src:/app/src
+      - ../tests:/app/tests
+      - ../CMakeLists.txt:/app/CMakeLists.txt
+      - ./init.sh:/init.sh
+      - ./watch.sh:/watch.sh
+      - builddata:/build
+    entrypoint: "/bin/bash /watch.sh"
+volumes:
+  builddata:

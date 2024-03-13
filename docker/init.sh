@@ -8,6 +8,27 @@ while [ -L "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symli
 done
 DIR=$(cd -P "$(dirname "$SOURCE")" >/dev/null 2>&1 && pwd)
 
-PROJ_ROOT=/greeting
+PROJ_ROOT=/app
+BUILD_DIR=/build
 
-ls ${PROJ_ROOT}/CMakeLists.txt ${PROJ_ROOT}/src/* | entr -d "/init.sh"
+set -e
+printf "\033c"
+mkdir -p ${BUILD_DIR} # create if it doesn't exist
+cd ${BUILD_DIR}
+cmake -DDEBUG=1 /app
+printf "\033c"
+
+echo "Executed at $(TZ=Europe/Madrid date)"
+make
+printf "\033c"
+
+echo "Executed at $(TZ=Europe/Madrid date)"
+echo ""
+echo "Running lib tests"
+echo "--------------------------"
+./lib_tests
+echo ""
+echo "Running app tests"
+echo "--------------------------"
+./tests
+set +e

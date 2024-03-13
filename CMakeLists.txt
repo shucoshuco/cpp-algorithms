@@ -33,21 +33,89 @@ FetchContent_MakeAvailable(
     Catch2
 )
 
+# Library
+
+set(
+    LIB_INC_DIR
+    ${CMAKE_SOURCE_DIR}/lib/inc
+)
+
+set(
+    LIB_SRC_DIR
+    ${CMAKE_SOURCE_DIR}/lib/src
+)
+
+set(
+    INC_DIR
+    ${CMAKE_SOURCE_DIR}/inc
+)
+
+add_library(
+    lib
+    ${LIB_SRC_DIR}/graph.cpp
+    ${LIB_SRC_DIR}/avl.cpp
+    ${LIB_SRC_DIR}/btree.cpp
+    ${LIB_SRC_DIR}/trie.cpp
+    ${LIB_SRC_DIR}/utils.cpp
+)
+
+target_include_directories(lib PUBLIC "${LIB_INC_DIR}")
+
+# Library tests
+
+set(
+    LIB_TEST_DIR
+    ${CMAKE_SOURCE_DIR}/lib/tests
+)
+
+add_executable(lib_tests
+               ${LIB_TEST_DIR}/test_graph.cpp
+               ${LIB_TEST_DIR}/test_avl.cpp
+               ${LIB_TEST_DIR}/test_btree.cpp
+               ${LIB_TEST_DIR}/test_trie.cpp
+               ${LIB_TEST_DIR}/test_btree.cpp
+               ${LIB_TEST_DIR}/test_utils.cpp
+)
+
+target_include_directories(lib_tests PUBLIC "${LIB_INC_DIR}")
+
+target_link_libraries(lib_tests
+    PRIVATE
+        lib
+        Catch2::Catch2WithMain
+)
+
+
+# Application
+
 set(
     SRC_DIR
     ${CMAKE_SOURCE_DIR}/src
 )
 
 add_library(
-    hello
-    ${SRC_DIR}/hello.cpp
+    app
+    ${SRC_DIR}/main.cpp
+)
+
+target_include_directories(app PUBLIC "${INC_DIR}" "${LIB_INC_DIR}")
+
+# Application tests
+
+set(
+    TEST_DIR
+    ${CMAKE_SOURCE_DIR}/tests
 )
 
 add_executable(tests
-               ${SRC_DIR}/test_hello.cpp
+               ${TEST_DIR}/test_main.cpp
 )
+
+target_include_directories(tests PUBLIC "${INC_DIR}" "${LIB_INC_DIR}")
+
 target_link_libraries(tests
     PRIVATE
-        hello
+        app
+        lib
         Catch2::Catch2WithMain
 )
