@@ -45,17 +45,13 @@ set(
     ${CMAKE_SOURCE_DIR}/lib/src
 )
 
-set(
-    INC_DIR
-    ${CMAKE_SOURCE_DIR}/inc
-)
-
 add_library(
     lib
     ${LIB_SRC_DIR}/graph.cpp
     ${LIB_SRC_DIR}/avl.cpp
     ${LIB_SRC_DIR}/btree.cpp
     ${LIB_SRC_DIR}/trie.cpp
+    ${LIB_SRC_DIR}/heap.cpp
     ${LIB_SRC_DIR}/utils.cpp
 )
 
@@ -73,6 +69,7 @@ add_executable(lib_tests
                ${LIB_TEST_DIR}/test_avl.cpp
                ${LIB_TEST_DIR}/test_btree.cpp
                ${LIB_TEST_DIR}/test_trie.cpp
+               ${LIB_TEST_DIR}/test_heap.cpp
                ${LIB_TEST_DIR}/test_btree.cpp
                ${LIB_TEST_DIR}/test_utils.cpp
 )
@@ -89,16 +86,28 @@ target_link_libraries(lib_tests
 # Application
 
 set(
+    INC_DIR
+    ${CMAKE_SOURCE_DIR}/inc
+)
+
+set(
     SRC_DIR
     ${CMAKE_SOURCE_DIR}/src
 )
 
-add_library(
-    app
+add_executable(
+    app_lib
     ${SRC_DIR}/main.cpp
 )
 
-target_include_directories(app PUBLIC "${INC_DIR}" "${LIB_INC_DIR}")
+target_include_directories(app_lib PUBLIC "${INC_DIR}" "${LIB_INC_DIR}")
+
+target_link_libraries(app_lib
+    PRIVATE
+        lib
+        Catch2::Catch2WithMain
+)
+
 
 # Application tests
 
@@ -115,7 +124,6 @@ target_include_directories(tests PUBLIC "${INC_DIR}" "${LIB_INC_DIR}")
 
 target_link_libraries(tests
     PRIVATE
-        app
         lib
         Catch2::Catch2WithMain
 )

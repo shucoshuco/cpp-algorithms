@@ -7,6 +7,15 @@ int * init_vector(int size, int value) {
   return vector;
 }
 
+int *copy_vector(int *v, int v_size, int new_size) {
+  int safe_size = std::max(v_size, new_size);
+  int *new_vector = init_vector(safe_size, 0);
+  for (int i = 0; i < safe_size; i++) {
+    new_vector[i] = v[i];
+  }
+  return new_vector;
+}
+
 void change(int *list, int i, int j) {
   int tmp = list[j];
   list[j] = list[i];
