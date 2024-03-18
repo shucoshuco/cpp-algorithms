@@ -1,11 +1,11 @@
+#include "binarytree.hpp"
 #include <memory>
 #include <string>
 
-class RBTNode {
+class RBTNode : public BinaryTreeNode {
   friend class RBTree;
 
   private:
-    int value_;
     bool black_;
     std::shared_ptr<RBTNode> left_;
     std::shared_ptr<RBTNode> right_;
@@ -15,6 +15,9 @@ class RBTNode {
     RBTNode(const int &value, std::shared_ptr<RBTNode> parent, const bool black = false);
     RBTNode(RBTNode &node) = delete;
     RBTNode &operator=(RBTNode &node) = delete;
+
+    const std::shared_ptr<BinaryTreeNode> get_left() const;
+    const std::shared_ptr<BinaryTreeNode> get_right() const;
 
     const int get_black_depth() const;
     const bool is_valid() const;
@@ -33,9 +36,10 @@ class RBTNode {
     const std::string print();
 };
 
-class RBTree {
+class RBTree : public BinaryTree {
   private:
     std::shared_ptr<RBTNode> root_;
+    const std::shared_ptr<BinaryTreeNode> get_root() const;
     std::shared_ptr<RBTNode> insert(std::shared_ptr<RBTNode> &parent, const int &value);
     void rotate_left(std::shared_ptr<RBTNode> &node);
     void rotate_right(std::shared_ptr<RBTNode> &node);
@@ -54,7 +58,6 @@ class RBTree {
     RBTree(RBTree &node) = delete;
     RBTree &operator=(RBTree &tree) = delete;
 
-    bool find(const int &value);
     void insert(const int &value);
     const int get_black_depth();
     const bool is_valid();

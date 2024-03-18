@@ -4,9 +4,20 @@
 
 using namespace std;
 
-RBTNode::RBTNode(const int &value, shared_ptr<RBTNode> parent, const bool black)
-    : value_{value}, black_{black}, left_{nullptr}, right_{nullptr}, parent_{parent}
-{
+RBTNode::RBTNode(const int &value, shared_ptr<RBTNode> parent, const bool black) :
+    BinaryTreeNode(value),
+    black_{black},
+    left_{nullptr},
+    right_{nullptr},
+    parent_{parent}
+{ }
+
+const std::shared_ptr<BinaryTreeNode> RBTNode::get_left() const {
+    return static_cast<std::shared_ptr<BinaryTreeNode>>(left_);
+}
+
+const std::shared_ptr<BinaryTreeNode> RBTNode::get_right() const {
+    return static_cast<std::shared_ptr<BinaryTreeNode>>(right_);
 }
 
 const bool RBTNode::is_black() const {
@@ -87,26 +98,16 @@ const std::string RBTNode::print() {
 RBTree::RBTree() : root_{nullptr}
 {}
 
-RBTree::RBTree(std::initializer_list<int> &list) : root_{nullptr}
-{
-    for (auto it = list.begin(); it != list.end(); it++) {
-        insert(*it);
+RBTree::RBTree(std::initializer_list<int> &list) : root_{nullptr} {
+    if (list.begin() == list.end()) {
+        throw new invalid_argument(
+            "Can't create a empty AVL tree");
     }
+    this->insert_all(list);
 }
 
-bool RBTree::find(const int &value) {
-    auto current = root_.get();
-    while (current) {
-        if (current->value_ == value) {
-            return true;
-        }
-        if (value < current->value_) {
-            current = current->left_.get();
-        } else {
-            current = current->right_.get();
-        }
-    }
-    return false;
+const std::shared_ptr<BinaryTreeNode> RBTree::get_root() const {
+    return static_cast<std::shared_ptr<BinaryTreeNode>>(root_);
 }
 
 std::shared_ptr<RBTNode> RBTree::insert(std::shared_ptr<RBTNode> &parent, const int &value) {

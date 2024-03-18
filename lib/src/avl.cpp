@@ -13,12 +13,20 @@ using namespace std;
 
 
 AVLTNode::AVLTNode(const int &value) :
-    value_{value},
+    BinaryTreeNode(value),
     left_{nullptr},
     right_{nullptr},
     left_depth_{0},
     right_depth_{0}
 {}
+
+const std::shared_ptr<BinaryTreeNode> AVLTNode::get_left() const {
+    return static_cast<std::shared_ptr<BinaryTreeNode>>(left_);
+}
+
+const std::shared_ptr<BinaryTreeNode> AVLTNode::get_right() const {
+    return static_cast<std::shared_ptr<BinaryTreeNode>>(right_);
+}
 
 const int AVLTNode::get_depth() const {
     return max(left_depth_, right_depth_) + 1;
@@ -48,42 +56,25 @@ AVLTree::AVLTree(initializer_list<int> &list) : root_{nullptr} {
         throw new invalid_argument(
             "Can't create a empty AVL tree");
     }
+    this->insert_all(list);
+}
 
-    for (auto it = list.begin(); it != list.end(); it++) {
-        insert(*it);
-    }
+const std::shared_ptr<BinaryTreeNode> AVLTree::get_root() const {
+    return static_cast<std::shared_ptr<BinaryTreeNode>>(root_);
 }
 
 void AVLTree::insert(const int &value) {
     if (root_ == nullptr) {
-        root_ = make_unique<AVLTNode>(value);
+        root_ = make_shared<AVLTNode>(value);
     } else {
-        insert(value, root_);
+        this->insert(value, root_);
     }
     root_->recalculate_depth();
 }
 
-bool AVLTree::find(const int &value) {
-    if (!root_) {
-        return false;
-    }
-    auto current = root_.get();
-    while (current) {
-        if (current->value_ == value) {
-            return true;
-        }
-        if (value < current->value_) {
-            current = current->left_.get();
-        } else {
-            current = current->right_.get();
-        }
-    }
-    return false;
-}
-
-int AVLTree::insert(const int &value, std::unique_ptr<AVLTNode> &node) {
+int AVLTree::insert(const int &value, std::shared_ptr<AVLTNode> &node) {
     if (node.get() == nullptr) {
-        node = make_unique<AVLTNode>(value);
+        node = make_shared<AVLTNode>(value);
     } else if (value == node->value_) {
         cout << "Duplicated value " << value << endl;
     } else if (value < node->value_) {
@@ -96,11 +87,7 @@ int AVLTree::insert(const int &value, std::unique_ptr<AVLTNode> &node) {
     return node->get_depth(); 
 }
 
-const int AVLTree::get_depth() {
-    return root_->get_depth();
-}
-
-void AVLTree::balance(std::unique_ptr<AVLTNode> &node) {
+void AVLTree::balance(std::shared_ptr<AVLTNode> &node) {
     int balance = node->get_balance();
     if (balance < -1) {
         if (node->left_->get_balance() > 1) {
@@ -115,15 +102,15 @@ void AVLTree::balance(std::unique_ptr<AVLTNode> &node) {
     }
 };
 
-void AVLTree::rotate_right(std::unique_ptr<AVLTNode> &node) {
-    std::unique_ptr<AVLTNode> root = std::move(node);
+void AVLTree::rotate_right(std::shared_ptr<AVLTNode> &node) {
+    std::shared_ptr<AVLTNode> root = std::move(node);
     node = std::move(root->left_);
     root->left_ = std::move(node->right_);
     node->right_ = std::move(root);
 };
 
-void AVLTree::rotate_left(std::unique_ptr<AVLTNode> &node) {
-    std::unique_ptr<AVLTNode> root = std::move(node);
+void AVLTree::rotate_left(std::shared_ptr<AVLTNode> &node) {
+    std::shared_ptr<AVLTNode> root = std::move(node);
     node = std::move(root->right_);
     root->right_ = std::move(node->left_);
     node->left_ = std::move(root);

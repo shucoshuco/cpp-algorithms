@@ -48,11 +48,12 @@ set(
 add_library(
     lib
     ${LIB_SRC_DIR}/graph.cpp
+    ${LIB_SRC_DIR}/binarytree.cpp
     ${LIB_SRC_DIR}/avl.cpp
+    ${LIB_SRC_DIR}/rbtree.cpp
     ${LIB_SRC_DIR}/btree.cpp
     ${LIB_SRC_DIR}/trie.cpp
     ${LIB_SRC_DIR}/heap.cpp
-    ${LIB_SRC_DIR}/rbtree.cpp
     ${LIB_SRC_DIR}/utils.cpp
 )
 
