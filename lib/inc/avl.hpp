@@ -38,6 +38,7 @@ class AVLTree {
     AVLTree &operator=(AVLTree &tree) = delete;
 
     void insert(const int &value);
+    bool find(const int &value);
     const int get_depth();
     const std::string print();
 };

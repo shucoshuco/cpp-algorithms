@@ -52,6 +52,7 @@ add_library(
     ${LIB_SRC_DIR}/btree.cpp
     ${LIB_SRC_DIR}/trie.cpp
     ${LIB_SRC_DIR}/heap.cpp
+    ${LIB_SRC_DIR}/rbtree.cpp
     ${LIB_SRC_DIR}/utils.cpp
 )
 
@@ -68,6 +69,7 @@ add_executable(lib_tests
                ${LIB_TEST_DIR}/test_graph.cpp
                ${LIB_TEST_DIR}/test_avl.cpp
                ${LIB_TEST_DIR}/test_btree.cpp
+               ${LIB_TEST_DIR}/test_rbtree.cpp
                ${LIB_TEST_DIR}/test_trie.cpp
                ${LIB_TEST_DIR}/test_heap.cpp
                ${LIB_TEST_DIR}/test_btree.cpp

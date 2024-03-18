@@ -63,6 +63,24 @@ void AVLTree::insert(const int &value) {
     root_->recalculate_depth();
 }
 
+bool AVLTree::find(const int &value) {
+    if (!root_) {
+        return false;
+    }
+    auto current = root_.get();
+    while (current) {
+        if (current->value_ == value) {
+            return true;
+        }
+        if (value < current->value_) {
+            current = current->left_.get();
+        } else {
+            current = current->right_.get();
+        }
+    }
+    return false;
+}
+
 int AVLTree::insert(const int &value, std::unique_ptr<AVLTNode> &node) {
     if (node.get() == nullptr) {
         node = make_unique<AVLTNode>(value);
